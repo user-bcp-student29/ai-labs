@@ -1,0 +1,43 @@
+AMBITO
+Workspace: ai-labs, abierto en su raiz. Todas las rutas son relativas
+a esa raiz. Lee el codigo solo de auth/; escribe codigo, configuracion y
+pruebas solo en auth/. No leas ni modifiques codigo de otros componentes.
+Lee README.md, RETO.md, HALLAZGOS.md, PLAN.md y
+docs/GOOD_PRACTICES.md. Consulta los demas documentos de docs/ si existen.
+Escribe evidencias solo en HALLAZGOS.md, PLAN.md, prompts/,
+docs/ENDPOINTS.md, docs/TESTING.md y docs/GOOD_PRACTICES.md de la raiz,
+conservando las filas y secciones de otros componentes. No los sobrescribas.
+Cada hallazgo lleva componente auth e ID H-AUTH-NN, por ejemplo H-AUTH-01.
+Cita codigo como auth/ruta:linea. No renumeres IDs existentes.
+Ejecuta Git desde ai-labs/; ejecuta pruebas con cwd auth/.
+Coordina dependencias externas sin ampliar AMBITO. No inventes aprobaciones
+humanas ni resultados de pruebas. Si falta evidencia, registra el pendiente.
+
+CONTEXTO
+Trabaja solo las filas y secciones de auth en los documentos generales.
+Conserva contenido previo de otros componentes y el historial de este componente.
+Si docs/ENDPOINTS.md existe, distingue contrato observado, contrato acordado y
+riesgos pendientes. Si docs/TESTING.md existe, relaciona cada ejecucion con
+componente e IDs; si no, registra la evidencia en PLAN.md.
+Comprueba la aprobacion humana real registrada para estos IDs en PLAN.md.
+Si falta, detente antes de editar codigo. Úsalo como guía única.
+
+OBJETIVO
+Implementar cada item de PLAN.md, uno a la vez y en el orden en que aparecen,
+con su prueba antes y después. Después de cada uno, actualizar su fila en
+HALLAZGOS.md antes de pasar al siguiente.
+
+RESTRICCIONES
+No implementes items que no estén en PLAN.md. No reduzcas quality gates. No
+avances al siguiente item si el anterior no quedó con su prueba en verde.
+
+CRITERIOS DE ACEPTACIÓN
+Cada item de PLAN.md queda con su propio diff y su propia prueba. Cada fila
+correspondiente en HALLAZGOS.md pasa a estado "Resuelto", con una nota corta
+(1-2 líneas) de cómo se resolvió y qué test y diff local lo respaldan. Los contratos
+existentes de docs/ENDPOINTS.md siguen funcionando, salvo que algún item pidiera
+cambiarlos a propósito.
+
+FORMATO DE RESPUESTA
+Por cada item: el diff, la caracterizacion antes y despues del cambio y la prueba de correccion
+con sus resultados reales, y la fila de HALLAZGOS.md actualizada con la nota de resolución.
