@@ -31,9 +31,12 @@ class AuthResourceTest {
     @Inject
     LegacyDatabase database;
 
+    @Inject
+    TokenService tokenService;
+
     @Test
     void logsInWithWorkshopUser() {
-        given()
+        String token = given()
                 .contentType("application/json")
                 .body("{\"username\":\"student\",\"password\":\"Workshop123!\",\"client\":\"angular-workshop\"}")
                 .when().post("/auth/login")
@@ -44,7 +47,10 @@ class AuthResourceTest {
                 .body("user.role", is("STUDENT"))
                 .body("expiresIn", is(3600))
                 .body("debug", is("authenticated-with-legacy-flow"))
-                .body("token", notNullValue());
+                .body("token", notNullValue())
+                .extract().path("token");
+
+        assertTrue(tokenService.verify(token));
     }
 
     @Test
