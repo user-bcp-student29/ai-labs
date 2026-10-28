@@ -4,7 +4,7 @@
 
 Esta evidencia corresponde solo al componente `auth` y a los endpoints de su sección en [ENDPOINTS.md](ENDPOINTS.md): `GET /q/health` y `POST /auth/login`. El contrato de `auth` allí descrito es observado, no aprobado humanamente.
 
-La suite usa SQLite. `AuthResourceTest` toma `AUTH_DB_URL` y, si no se define, cae por defecto en `./data/workshop.db`; algunas pruebas migran todas las filas y eliminan/recrean `trainer`. Para evitar alterar la base persistente, todas las ejecuciones registradas aquí definieron `AUTH_DB_URL=jdbc:sqlite:./target/auth-tests.db`. No ejecutes estas pruebas sin una base descartable hasta resolver H-AUTH-09 (`HALLAZGOS.md`).
+La suite usa SQLite. `AuthResourceTest` toma `AUTH_DB_URL` y, si no se define, cae por defecto en `./data/workshop.db`; algunas pruebas migran todas las filas y eliminan/recrean `trainer`. Para evitar alterar la base persistente, cada ejecución debe definir `AUTH_DB_URL` con una base descartable bajo `target/` (por ejemplo, `jdbc:sqlite:./target/auth-tests.db`). No ejecutes estas pruebas sin una base descartable hasta resolver H-AUTH-09 (`HALLAZGOS.md`).
 
 ## Casos
 
@@ -249,10 +249,10 @@ Las clases productivas tocadas superan la meta local del 85%; `PasswordHasher` q
 - H-AUTH-09: la clase de tests conserva un fallback a `./data/workshop.db`; esta evidencia solo vale para los comandos que fijan `AUTH_DB_URL` a `target/auth-tests.db`. No ejecutar la suite sobre datos persistentes.
 - H-AUTH-08: probar el acceso desde fuera del contenedor cuando se corrija la clave de perfil del host. En la configuración actual el proceso observado escucha en `127.0.0.1`.
 - `/q/health` no tiene checks y devuelve `UP` con lista vacía. No hay prueba para `503` porque ese estado no existe en el código/configuración actual; si se añade un check, agregar caso `DOWN` con su cuerpo observado.
-- Los riesgos de contrato no remediados H-AUTH-03/-04/-05 (token sin firma/validación, secreto y CORS amplios, y errores verbosos) siguen como pendientes de seguridad; las pruebas caracterizan comportamiento actual, no lo aprueban.
+- H-AUTH-03: la emisión firmada y el verificador con validación de expiración tienen pruebas unitarias. No existe un endpoint consumidor en `auth`, por lo que la verificación no se aplica a solicitudes entrantes. H-AUTH-04 sigue pendiente para CORS amplio; retirar el secreto embebido y usar `AUTH_TOKEN_SECRET` fue necesario para firmar tokens.
 
 ### Pruebas propuestas
 
 - Una vez aislada la DB desde el propio fixture o configuración de tests, ejecutar `mvn verify` sin override ambiental y comprobar que no lee ni modifica `auth/data/workshop.db`.
-- Tras acordar cambios para H-AUTH-03/-04/-05, añadir pruebas de firma/expiración de tokens, allowlist CORS y cuerpos genéricos de error antes de actualizar sus contratos.
+- Para completar la validación del token en el flujo, identificar y aprobar el componente consumidor y el contrato de autorización antes de integrar `TokenService.verify`. Para H-AUTH-04/-05, acordar cambios y añadir pruebas de allowlist CORS y cuerpos genéricos de error.
 - Tras corregir H-AUTH-08, ejecutar una prueba de integración bajo perfil `prod` desde un contenedor/red distinta y verificar que el servicio escucha en la interfaz esperada.

@@ -167,7 +167,7 @@ El ejemplo se basa en una respuesta `200` observada; solo se sustituyó el valor
 
 #### 6. Notas de seguridad
 
-- El `token` actual es Base64 de datos concatenados con un secreto estático; no es un token firmado ni una prueba verificable de identidad. El login incorpora una expiración al contenido y devuelve `expiresIn`, pero no existe aquí una validación de token/expiración. No asumir que el formato equivale a JWT ni que un header `Authorization: Bearer` es un contrato admitido por este servicio (`auth/src/main/java/com/bcp/workshop/auth/LegacyTokenUtil.java:8,12-15`).
+- El `token` emitido es un valor opaco firmado con HMAC-SHA256; `TokenService.verify` comprueba la firma y la expiración. No hay en `auth` un endpoint consumidor que invoque esa verificación, por lo que este cambio no agrega protección de rutas ni establece un header `Authorization`. El secreto de firma debe proporcionarse mediante la variable de entorno `AUTH_TOKEN_SECRET`. No asumir que el formato equivale a JWT ni que un header `Authorization: Bearer` es un contrato admitido por este servicio (`auth/src/main/java/com/bcp/workshop/auth/TokenService.java`).
 - No se identificó en `auth` otro endpoint protegido por el token. El header exacto de autorización para consumidores externos es una pregunta abierta; no inferirlo de la respuesta de login.
 - La respuesta `401` refleja el username y la respuesta `500` expone mensaje y clase de excepción. Son comportamientos observados, no una recomendación para nuevos clientes (`auth/src/main/java/com/bcp/workshop/auth/AuthResource.java:35-43`).
 - CORS está habilitado con el patrón amplio `/.*/` (`auth/src/main/resources/application.properties:4-8`).
