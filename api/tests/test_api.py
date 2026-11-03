@@ -42,8 +42,8 @@ def test_creates_task_and_summary(tmp_path: Path) -> None:
 def test_quoted_owner_filters_are_treated_as_data(tmp_path: Path) -> None:
     app = create_app(str(tmp_path / "workshop.db"), str(tmp_path / "uploads"))
     with TestClient(app, raise_server_exceptions=False) as client:
-        tasks = client.get("/api/tasks", params={"owner": "O'Brien"}, headers=headers())
-        summary = client.get("/api/summary", params={"owner": "O'Brien"}, headers=headers())
+        tasks = client.get("/api/tasks", params={"owner": "O'Brien"}, headers=headers("O'Brien"))
+        summary = client.get("/api/summary", params={"owner": "O'Brien"}, headers=headers("O'Brien"))
     assert tasks.status_code == 200
     assert tasks.json() == []
     assert summary.status_code == 200

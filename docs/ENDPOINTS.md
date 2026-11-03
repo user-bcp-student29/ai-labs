@@ -24,7 +24,7 @@ Requiere `Authorization: Bearer <token>` como se describe en las convenciones. E
 
 | campo/parametro | tipo | obligatorio | descripcion |
 |---|---|---|---|
-| `owner` (query) | string | No | Owner usado para filtrar. Si se omite o es una cadena vacia, se usa `username` del token. Actualmente no se compara con esa identidad. |
+| `owner` (query) | string | No | Owner usado para filtrar. Si se omite o es una cadena vacia, se usa `username` del token. Si se solicita un owner distinto, la API responde `403`. |
 
 Ejemplo completo:
 
@@ -69,13 +69,12 @@ Ejemplo de una lista con una tarea (IDs y timestamp ilustrativos):
 | codigo | cuando ocurre | ejemplo de cuerpo |
 |---|---|---|
 | `401 Unauthorized` | Header ausente o token que no puede decodificarse/validarse. El texto exacto depende de la excepcion capturada. | `{"detail":"Invalid token: invalid token"}` |
+| `403 Forbidden` | El `owner` solicitado es distinto del `username` del token. | `{"detail":"Not authorized to access this owner"}` |
 | `500 Internal Server Error` | Falla no controlada al consultar SQLite. La respuesta por defecto de FastAPI/Starlette no incluye el detalle de la excepcion. | `Internal Server Error` (texto plano) |
-
-No se observa una respuesta `403` para un `owner` distinto: actualmente la ruta consulta ese owner.
 
 ### 6. Notas de seguridad
 
-La consulta usa parametros SQL, pero la autorizacion no esta ligada a la identidad si el cliente envia otro `owner`; un usuario autenticado puede consultar tareas de otro owner. El token Base64 no tiene firma criptografica.
+La consulta usa parametros SQL y la ruta solo permite consultar tareas del `username` autenticado. El token Base64 no tiene firma criptografica.
 
 ---
 
