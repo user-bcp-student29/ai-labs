@@ -1,0 +1,64 @@
+/* auth-login.component.css */
+:host {
+  display: block;
+}
+
+form {
+  max-width: 28rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #666;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #171717;
+}
+
+input[aria-invalid='true'] {
+  border-color: #b42318;
+}
+
+button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background: #174ea6;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid #f0a202;
+  outline-offset: 3px;
+}
+
+.field-error,
+.feedback.error {
+  color: #b42318;
+}
+
+.feedback.success {
+  color: #176b36;
+}
